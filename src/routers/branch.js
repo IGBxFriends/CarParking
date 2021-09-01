@@ -6,7 +6,7 @@ const router = express.Router();
 
 const branchs = [];
 
-router.get('/',( request, response )=>{
+router.get('/all',( request, response )=>{
     
     if( branchs.length == 0 ){
         return response.status(400).send({ message: "Nenhuma Filial cadastrada"});

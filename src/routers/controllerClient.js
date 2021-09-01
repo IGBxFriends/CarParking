@@ -1,4 +1,3 @@
-const { response } = require('express');
 const express = require('express');
 const { uuid, isUuid } = require('uuidv4');
 const Client = require('../models/client');
@@ -19,29 +18,20 @@ router.get('/all', async ( request, response )=>{
 });
 
 router.post('/', ( request, response )=>{
-    const { name, cellphone } = request.body;
+    const { name, phone } = request.body;
 
-    const clientIndex = clients.find( (cli) => cli.name == name & cli.cellphone == cellphone );
-    
-    console.log(clientIndex)
-    try {
-        if(!clientIndex == 0 ){
-            return response.status(400).send({ message: "Cliente já cadastrado" })
-        }else{
-    
-            const client = {
-                id: uuid(),
-                name: name,
-                cellphone: cellphone
-            }
-        
-            clients.push(client);
-    
-            return response.status(200).send({ message: "Registro cadastrado com sucesso"});
-        }
-    } catch (error) {
-        return response.status(400).send({ message: "Não foi possível efetuar o cadastro do cliente" })
-    }
+	const newClient = new Client({
+		name: name,
+		phone: phone
+	});
+
+	newClient.save();
+
+	return response.status(200).send({ 
+		message: "Registro cadastro com vc",
+		client: newClient
+	})
+   
 });
 
 router.put('/:id',( request, response )=>{

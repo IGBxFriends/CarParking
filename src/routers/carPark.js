@@ -7,7 +7,7 @@ const router = express.Router();
 const msgInvalid = "O ID informado está inválido";
 const carParks = [];
 
-router.get('/', ( request, response )=>{
+router.get('/all', ( request, response )=>{
     if( carParks.length === 0 ){
         response.status(401).send({ message: "Nenhuma reserva encontrada" })
     }
@@ -28,6 +28,13 @@ router.post('/',( request, response )=>{
         price: price,
         status: status
     }
+
+	carParks.push(carPark);
+
+	response.status(200).send({ 
+		message: "Registro criado",
+		carPark: carPark
+	});
 });
 
 router.put('/:id', ( request, response )=>{
