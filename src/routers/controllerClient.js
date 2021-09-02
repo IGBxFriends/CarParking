@@ -7,14 +7,12 @@ const router = express.Router();
 const clients = [];
 
 router.get('/all', async ( request, response )=>{
-    const clients = await Client.find();
-    
-    if(clients.length == 0){
-        console.log(clients)
-        return response.status(400).send({ message: "Nenhum registro encontrado"})
-    }
-    console.log(clients)
-    return response.status(200).send(clients);
+   try {
+        const clients = await Client.find();
+        response.status(200).send(clients);
+   } catch (err) {
+       response.status(400).send({ message: "Ocorreu um erro: ", error: err  })
+   }
 });
 
 router.post('/', ( request, response )=>{
@@ -34,7 +32,7 @@ router.post('/', ( request, response )=>{
    
 });
 
-router.put('/:id',( request, response )=>{
+router.put('/edit/:id',( request, response )=>{
     const id = request.params.id;
     const { name, cellphone } = request.body;
 

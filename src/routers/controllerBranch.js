@@ -6,45 +6,31 @@ const router = express.Router();
 
 const branchs = [];
 
-router.get('/all',( request, response )=>{
-    
-    if( branchs.length == 0 ){
-        return response.status(400).send({ message: "Nenhuma Filial cadastrada"});
+router.get('/all', async ( request, response )=>{    
+    try {
+        const branch = await Branch.find();
+        response.status(200).send(branch);
+    } catch (err) {
+        response.status(400).send({ message: "Ocorreu um erro", error: err });
     }
-
-    return response.status(200).send(branchs);
-
 });
 
-router.post('/', ( request, response )=>{
+router.post('/', async ( request, response )=>{
     const { name, address, parkingSpace } = request.body;
 
-    const filialIndex = branchs.find( (filial)=> filial.name == name & filial.address == address );
-  
     try{        
-        if(!filialIndex == 0 ){                      
-           return response.status(400).send({ 
-                message: "Filial já cadastrada"
-            });
-        }else{
-    
-        const branch = {
-            id: uuid(),
+        const branch = new Branch({
             name: name,
             address: address,
             parkingSpace: parkingSpace,
             freeSpace: parkingSpace,
             register: new Date()
-        }
+        })
     
-        branchs.push(branch);
-    
-        return response.status(200).send({
-            message: "Registro criado com sucesso",
-            filial: branch
-        });
-    }
+        branch.save();
 
+        return response.status(200).send(branch);
+        
     }catch(ex){
        response.status(400).send({ message: "Não foi possível realizar o cadastro dessa filial"})
     }

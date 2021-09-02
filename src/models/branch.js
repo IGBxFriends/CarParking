@@ -10,10 +10,14 @@ const BranchSchema = new mongoose.Schema({
         type: String,
         required: Boolean,
     },
-	vagas: {
+	parkingSpace: {
         type: Number,
         required: Boolean,
-    }
+    },
+    register: {
+        type: String,
+        required: Boolean,
+    }    
 });
 
 const Branch = mongoose.model('Branch', BranchSchema, 'Branchs');
