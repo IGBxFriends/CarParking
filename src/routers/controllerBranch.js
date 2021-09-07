@@ -23,7 +23,7 @@ router.post('/', async ( request, response )=>{
             name: name,
             address: address,
             parkingSpace: parkingSpace,
-            freeSpace: parkingSpace,
+            freeSpace: 0,
             register: new Date()
         })
     

@@ -1,0 +1,13 @@
+{
+    "configurations": [        
+        
+        {
+            "type": "node",
+            "request": "attach",
+            "protocol": "inspector",
+            "restart": true,
+            "name": "CarParking",
+            "skipFiles": [ "<node_internals>/**" ],           
+        }
+    ],    
+}

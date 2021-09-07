@@ -10,6 +10,7 @@ const msgInvalid = "O ID informado está inválido";
 const carParks = [];
 
 
+
 router.get('/all', async ( request, response )=>{
    try {
        const carPark = await CarPark.find();
@@ -19,11 +20,10 @@ router.get('/all', async ( request, response )=>{
    }
 });
 
-router.post('/Register', async ( request, response, next )=>{
+router.post('/CheckIn', async ( request, response, next )=>{
     const { board, idClient, idBranch, startTime, endTime, price, status } = request.body;
       
-    const error = [];
-
+    const error = []
     try {        
         await Client.findById(idClient).catch( (err) => error.push({ Error: "ID do cliente não encontrado" }));
         
@@ -42,8 +42,23 @@ router.post('/Register', async ( request, response, next )=>{
             price: price, 
             status: status
         })
+        
 
         newCarPark.save();
+
+        const { parkingSpace,  freeSpace } = await Branch.findById(idBranch);
+        const result = freeSpace + 1
+      
+
+        if(freeSpace >= parkingSpace ){
+            return response.status(400).send({ message: "Estacionamento lotado" });
+        } 
+        
+        Branch.findOneAndUpdate(idBranch, { freeSpace: result }, (err, docs) => { 
+           if(err){
+               console.log("Ocorreu um erro para atualizar o checkin"+err)
+           }else{ console.log("Update CheckIn: ", docs)}
+        })
 
         return response.status(200).send({ 
             message: "Reserva efetuada",
@@ -56,6 +71,8 @@ router.post('/Register', async ( request, response, next )=>{
     }
     
 });
+
+router.put()
 
 router.put('/:id', ( request, response )=>{
     const id = request.params.id;

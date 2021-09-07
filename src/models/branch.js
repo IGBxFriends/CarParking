@@ -14,6 +14,10 @@ const BranchSchema = new mongoose.Schema({
         type: Number,
         required: Boolean,
     },
+    freeSpace: {
+        type: Number,
+        required: true,
+    },
     register: {
         type: String,
         required: Boolean,
